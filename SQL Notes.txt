@@ -1,0 +1,685 @@
+List available databases:
+show databases; 
+
+The general command for creating a database:
+CREATE DATABASE database_name; 
+
+A specific example:
+CREATE DATABASE soap_store; 
+
+To drop a database:
+DROP DATABASE database_name; 
+
+To Use a DATABASE:
+USE <database name>;
+
+To See which DATABASE Currently we are using:
+SELECT database();
+
+CODE: Creating Your Own Tables
+CREATE TABLE tablename
+  (
+    column_name data_type,
+    column_name data_type
+  );
+
+Dropping Tables
+DROP TABLE <tablename>; 
+
+
+To List All the Tables in the Current DataBase:
+SHOW TABLES;
+
+To List All the columns in the table:
+show columns from <table_name>;  OR desc <table_name>;
+
+Inserting Data
+The "formula":
+	INSERT INTO table_name(column_name) VALUES (data);
+
+CODE: Multiple Insert
+INSERT INTO table_name 
+            (column_name, column_name) 
+VALUES      (value, value), 
+            (value, value), 
+            (value, value);
+
+*********************************************how to insert a string (VARCHAR) value that contains quotations*******************************
+  				You can do it a couple of ways:
+
+				Escape the quotes with a backslash: "This text has \"quotes\" in it" or 'This text has \'quotes\' in it'
+
+				Alternate single and double quotes: "This text has 'quotes' in it" or 'This text has "quotes" in it'
+
+
+********************************************************************************************************************************************
+
+
+To view the warning:
+SHOW WARNINGS;
+
+
+Define a new cats2 table with NOT NULL constraints:
+CREATE TABLE cats2
+  (
+    name VARCHAR(100) NOT NULL,
+    age INT NOT NULL
+  );
+
+Define a table with a DEFAULT name specified:
+
+CREATE TABLE cats3
+  (
+    name VARCHAR(20) DEFAULT 'no name provided',
+    age INT DEFAULT 99
+  );
+
+
+
+CODE: Primary Keys
+Define a table with a PRIMARY KEY constraint:
+
+CREATE TABLE unique_cats
+  (
+    cat_id INT NOT NULL,
+    name VARCHAR(100),
+    age INT,
+    PRIMARY KEY (cat_id)
+  );
+
+
+Adding in AUTO_INCREMENT:
+
+CREATE TABLE unique_cats2 (
+    cat_id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(100),
+    age INT,
+    PRIMARY KEY (cat_id)
+);
+
+CODE: Introduction to WHERE
+Select by age:
+SELECT * FROM cats WHERE age=4; 
+
+Select by name:
+SELECT * FROM cats WHERE name='Egg'; 
+
+Notice how it deals with case:
+SELECT * FROM cats WHERE name='egG'; 
+
+CODE: Introduction to Aliases
+SELECT cat_id AS id, name FROM cats;
+SELECT name AS 'cat name', breed AS 'kitty breed' FROM cats;
+
+CODE: Updating Data
+Change tabby cats to shorthair:
+UPDATE cats SET breed='Shorthair' WHERE breed='Tabby'; 
+
+Another update:
+UPDATE cats SET age=14 WHERE name='Misty';
+
+CODE: DELETING DATA
+DELETE FROM cats WHERE name='Egg';
+DELETE FROM cats WHERE name='egg';
+DELETE FROM cats;
+
+
+CODE: Working With CONCAT
+SELECT author_fname, author_lname FROM books;
+ 
+CONCAT(x,y,z) // from slides
+ 
+CONCAT(column," ", anotherColumn) // from slides
+ 
+SELECT CONCAT(title, '-', author_fname, '-', author_lname) FROM books;
+SELECT 
+    CONCAT_WS(' - ', title, author_fname, author_lname) 
+FROM books;
+
+CODE: Introducing SUBSTRING
+SELECT SUBSTRING('Hello World', 3, 8);
+SELECT CONCAT
+    (
+        SUBSTRING(title, 1, 10),
+        '...'
+    )
+FROM books;
+
+
+CODE: Introducing REPLACE
+SELECT REPLACE('Hello World', 'Hell', '%$#@');
+SELECT
+    SUBSTRING(REPLACE(title, 'e', '3'), 1, 10) AS 'weird string'
+FROM books;
+
+CODE: Using REVERSE
+SELECT REVERSE(author_fname) FROM books;
+SELECT CONCAT(author_fname, REVERSE(author_fname)) FROM books;
+
+CODE: Working with CHAR LENGTH
+SELECT CHAR_LENGTH('Hello World');
+SELECT author_lname, CHAR_LENGTH(author_lname) AS 'length' FROM books;
+SELECT CONCAT(author_lname, ' is ', CHAR_LENGTH(author_lname), ' characters long') FROM books;
+
+
+
+CODE: Changing Case with UPPER and LOWER
+SELECT UPPER('Hello World');
+ 
+SELECT LOWER('Hello World');
+SELECT UPPER(title) FROM books;
+SELECT CONCAT('MY FAVORITE BOOK IS ', UPPER(title)) FROM books;
+SELECT CONCAT('MY FAVORITE BOOK IS ', LOWER(title)) FROM books;
+
+****************************************************************************************************************************************************************
+I have two important notes for you.
+
+Firstly, before you move onto the next lecture, please remember that order is important when dealing with combining/wrapping certain string functions.
+
+For example:
+
+This works:
+
+SELECT UPPER(CONCAT(author_fname, ' ', author_lname)) AS "full name in caps"
+FROM books;
+While this does not:
+
+SELECT CONCAT(UPPER(author_fname, ' ', author_lname)) AS "full name in caps" 
+FROM books;
+UPPER only takes one argument and CONCAT takes two or more arguments, so they can't be switched in that way.
+
+****************************************************************************************************************************************************************
+
+CODE: Using DISTINCT
+SELECT author_lname FROM books;
+ 
+SELECT DISTINCT author_lname FROM books;
+ 
+SELECT author_fname, author_lname FROM books;
+ 
+SELECT DISTINCT CONCAT(author_fname,' ', author_lname) FROM books;
+ 
+SELECT DISTINCT author_fname, author_lname FROM books;
+
+
+
+CODE: Sorting Data with ORDER BY
+SELECT author_lname FROM books;
+ 
+SELECT author_lname FROM books ORDER BY author_lname;
+SELECT released_year FROM books ORDER BY released_year DESC;
+ 
+SELECT author_lname, title
+FROM books ORDER BY 2;
+ 
+SELECT author_fname, author_lname FROM books 
+ORDER BY author_lname, author_fname;
+
+CODE: Using LIMIT
+SELECT title FROM books LIMIT 3;
+SELECT title FROM books LIMIT 5, 50;
+
+CODE: Better Searches with LIKE
+SELECT title, author_fname FROM books WHERE author_fname LIKE '%da%';
+SELECT title, author_fname FROM books WHERE author_fname LIKE 'da%';
+SELECT title FROM books WHERE  title LIKE 'the';
+SELECT title, stock_quantity FROM books WHERE stock_quantity LIKE '____';
+SELECT title FROM books WHERE title LIKE '%\%%'
+
+CODE: The Count Function
+SELECT COUNT(*) FROM books;
+SELECT COUNT(DISTINCT author_fname) FROM books;
+SELECT COUNT(*) FROM books WHERE title LIKE '%the%';
+
+
+CODE: The Joys of Group By
+SELECT title, author_lname FROM books;
+SELECT title, author_lname FROM books
+GROUP BY author_lname;
+SELECT author_lname, COUNT(*) 
+FROM books GROUP BY author_lname;
+SELECT released_year, COUNT(*) FROM books GROUP BY released_year;
+SELECT CONCAT('In ', released_year, ' ', COUNT(*), ' book(s) released') AS year FROM books GROUP BY released_year;
+
+CODE: MIN and MAX Basics
+SELECT MIN(released_year) 
+FROM books;
+
+SELECT MAX(pages) 
+FROM books;
+
+
+SELECT title, pages FROM books 
+ORDER BY pages ASC LIMIT 1;
+ 
+SELECT * FROM books 
+ORDER BY pages DESC LIMIT 1;
+
+
+
+SELECT title, pages FROM books 
+WHERE pages = (SELECT Min(pages) 
+                FROM books); 
+				
+				
+				
+				
+				
+				CODE: Using Min and Max with Group By
+SELECT author_fname, 
+       author_lname, 
+       Min(released_year) 
+FROM   books 
+GROUP  BY author_lname, 
+          author_fname;
+ 
+SELECT
+  author_fname,
+  author_lname,
+  Max(pages)
+FROM books
+GROUP BY author_lname,
+         author_fname;
+ 
+SELECT
+  CONCAT(author_fname, ' ', author_lname) AS author,
+  MAX(pages) AS 'longest book'
+FROM books
+GROUP BY author_lname,
+         author_fname;
+		 
+		 
+		 CODE: The Sum Function
+SELECT SUM(pages)
+FROM books;
+ 
+SELECT SUM(released_year) FROM books;
+ 
+SELECT author_fname,
+       author_lname,
+       Sum(pages)
+FROM books
+GROUP BY
+    author_lname,
+    author_fname;
+ 
+SELECT author_fname,
+       author_lname,
+       Sum(released_year)
+FROM books
+GROUP BY
+    author_lname,
+    author_fname;
+	
+	
+CODE: The Avg Function
+SELECT AVG(released_year) 
+FROM books;
+ 
+SELECT AVG(pages) 
+FROM books;
+ 
+SELECT AVG(stock_quantity) 
+FROM books 
+GROUP BY released_year;
+ 
+SELECT released_year, AVG(stock_quantity) 
+FROM books 
+GROUP BY released_year;
+ 
+SELECT author_fname, author_lname, AVG(pages) FROM books
+GROUP BY author_lname, author_fname;
+
+
+CODE: Creating Our DATE data
+CREATE TABLE people (name VARCHAR(100), birthdate DATE, birthtime TIME, birthdt DATETIME);
+ 
+INSERT INTO people (name, birthdate, birthtime, birthdt)
+VALUES('Padma', '1983-11-11', '10:07:35', '1983-11-11 10:07:35');
+ 
+INSERT INTO people (name, birthdate, birthtime, birthdt)
+VALUES('Larry', '1943-12-25', '04:10:42', '1943-12-25 04:10:42');
+ 
+SELECT * FROM people;	
+
+
+
+
+
+CODE: Formatting Dates
+SELECT name, birthdate FROM people;
+ 
+SELECT name, DAY(birthdate) FROM people;
+ 
+SELECT name, birthdate, DAY(birthdate) FROM people;
+ 
+SELECT name, birthdate, DAYNAME(birthdate) FROM people;
+ 
+SELECT name, birthdate, DAYOFWEEK(birthdate) FROM people;
+ 
+SELECT name, birthdate, DAYOFYEAR(birthdate) FROM people;
+ 
+SELECT name, birthtime, DAYOFYEAR(birthtime) FROM people;
+ 
+SELECT name, birthdt, DAYOFYEAR(birthdt) FROM people;
+ 
+SELECT name, birthdt, MONTH(birthdt) FROM people;
+ 
+SELECT name, birthdt, MONTHNAME(birthdt) FROM people;
+ 
+SELECT name, birthtime, HOUR(birthtime) FROM people;
+ 
+SELECT name, birthtime, MINUTE(birthtime) FROM people;
+ 
+SELECT CONCAT(MONTHNAME(birthdate), ' ', DAY(birthdate), ' ', YEAR(birthdate)) FROM people;
+ 
+SELECT DATE_FORMAT(birthdt, 'Was born on a %W') FROM people;
+ 
+SELECT DATE_FORMAT(birthdt, '%m/%d/%Y') FROM people;
+ 
+SELECT DATE_FORMAT(birthdt, '%m/%d/%Y at %h:%i') FROM people;
+
+
+
+
+CREATE TABLE comments2 (
+    content VARCHAR(100),
+    changed_at TIMESTAMP DEFAULT NOW() ON UPDATE CURRENT_TIMESTAMP
+);
+ 
+INSERT INTO comments2 (content) VALUES('dasdasdasd');
+
+
+What's a good use case for CHAR?
+------
+Used for text that we know has a fixed length, e.g., State abbreviations, 
+abbreviated company names, sex M/F, etc.
+ 
+ 
+What's the difference between DATETIME and TIMESTAMP?
+------
+They both store datetime information, but there's a difference in the range, 
+TIMESTAMP has a smaller range. TIMESTAMP also takes up less space. 
+TIMESTAMP is used for things like meta-data about when something is created
+or updated.
+
+CODE: Not Equal
+SELECT title FROM books WHERE released_year = 2017;
+ 
+SELECT title FROM books WHERE released_year != 2017;
+
+CODE: Not Like
+SELECT title FROM books WHERE title LIKE 'W';
+ 
+SELECT title FROM books WHERE title NOT LIKE 'W%';
+
+CODE: Greater Than
+SELECT title, released_year FROM books ORDER BY released_year;
+SELECT title, released_year FROM books 
+WHERE released_year > 2000 ORDER BY released_year;
+
+CODE: Less Than
+SELECT title, released_year FROM books;
+ 
+SELECT title, released_year FROM books
+WHERE released_year < 2000;
+
+CODE: Logical AND
+
+SELECT title, released_year FROM books WHERE released_year >= 2004 && released_year <= 2015;
+
+SELECT * 
+FROM books
+WHERE author_lname='Eggers' 
+    AND released_year > 2010 
+    AND title LIKE '%novel%'
+	
+CODE: Logical OR
+SELECT 
+    title, 
+    author_lname, 
+    released_year 
+FROM books
+WHERE author_lname='Eggers' || released_year > 2010;
+
+SELECT title, 
+       author_lname, 
+       released_year, 
+       stock_quantity 
+FROM   books 
+WHERE  author_lname = 'Eggers' 
+              || released_year > 2010 
+OR     stock_quantity > 100;
+
+
+CODE: Between
+SELECT title, released_year FROM books WHERE released_year >= 2004 && released_year <= 2015;
+ 
+SELECT title, released_year FROM books 
+WHERE released_year BETWEEN 2004 AND 2015;
+
+
+SELECT title, released_year FROM books 
+WHERE released_year NOT BETWEEN 2004 AND 2015;
+
+
+
+CODE: In And Not In 
+SELECT 
+    title, 
+    author_lname 
+FROM books
+WHERE author_lname='Carver' OR
+      author_lname='Lahiri' OR
+      author_lname='Smith';
+ 
+SELECT title, author_lname FROM books
+WHERE author_lname IN ('Carver', 'Lahiri', 'Smith');
+
+SELECT title, released_year FROM books
+WHERE released_year != 2000 AND
+      released_year != 2002 AND
+      released_year != 2004 AND
+      released_year != 2006 AND
+      released_year != 2008 AND
+      released_year != 2010 AND
+      released_year != 2012 AND
+      released_year != 2014 AND
+      released_year != 2016;
+ 
+SELECT title, released_year FROM books
+WHERE released_year NOT IN 
+(2000,2002,2004,2006,2008,2010,2012,2014,2016);
+ 
+SELECT title, released_year FROM books
+WHERE released_year >= 2000
+AND released_year NOT IN 
+(2000,2002,2004,2006,2008,2010,2012,2014,2016);
+
+ 
+SELECT title, released_year FROM books
+WHERE released_year >= 2000 AND
+released_year % 2 != 0 ORDER BY released_year;
+
+
+CODE: Case Statements
+SELECT title, released_year,
+       CASE 
+         WHEN released_year >= 2000 THEN 'Modern Lit'
+         ELSE '20th Century Lit'
+       END AS GENRE
+FROM books;
+ 
+ 
+ 
+SELECT title, stock_quantity,
+    CASE 
+        WHEN stock_quantity BETWEEN 0 AND 50 THEN '*'
+        WHEN stock_quantity BETWEEN 51 AND 100 THEN '**'
+        WHEN stock_quantity BETWEEN 101 AND 150 THEN '***'
+        ELSE '****'
+    END AS STOCK
+FROM books;
+
+
+
+CODE: Working With Foreign Keys
+-- Creating the customers and orders tables
+
+CREATE TABLE customers(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(100),
+    last_name VARCHAR(100),
+    email VARCHAR(100)
+);
+
+CREATE TABLE orders(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_date DATE,
+    amount DECIMAL(8,2),
+    customer_id INT,
+    FOREIGN KEY(customer_id) REFERENCES customers(id)
+);
+
+
+CODE: Inner Joins
+Note: please see here for an animated visual of how inner joins work.
+
+
+-- IMPLICIT INNER JOIN
+
+SELECT * FROM customers, orders 
+WHERE customers.id = orders.customer_id;
+-- IMPLICIT INNER JOIN
+
+SELECT first_name, last_name, order_date, amount
+FROM customers, orders 
+    WHERE customers.id = orders.customer_id;
+    
+-- EXPLICIT INNER JOINS
+
+SELECT * FROM customers
+JOIN orders
+    ON customers.id = orders.customer_id;
+    
+SELECT first_name, last_name, order_date, amount 
+FROM customers
+JOIN orders
+    ON customers.id = orders.customer_id;
+    
+SELECT *
+FROM orders
+INNER JOIN customers
+    ON customers.id = orders.customer_id;
+-- ARBITRARY JOIN - meaningless, but still possible 
+
+SELECT * FROM customers
+JOIN orders ON customers.id = orders.id;
+
+
+CODE: Left Joins
+-- Getting Fancier (Inner Joins Still)
+
+SELECT first_name, last_name, order_date, amount 
+FROM customers
+JOIN orders
+    ON customers.id = orders.customer_id
+ORDER BY order_date;
+SELECT 
+    first_name, 
+    last_name, 
+    SUM(amount) AS total_spent
+FROM customers
+JOIN orders
+    ON customers.id = orders.customer_id
+GROUP BY orders.customer_id
+ORDER BY total_spent DESC;
+Note: please see here for an animated visual of how left/right joins work.
+
+-- LEFT JOINS
+
+SELECT * FROM customers
+LEFT JOIN orders
+    ON customers.id = orders.customer_id;
+SELECT first_name, last_name, order_date, amount
+FROM customers
+LEFT JOIN orders
+    ON customers.id = orders.customer_id; 
+SELECT 
+    first_name, 
+    last_name,
+    IFNULL(SUM(amount), 0) AS total_spent
+FROM customers
+LEFT JOIN orders
+    ON customers.id = orders.customer_id
+GROUP BY customers.id
+ORDER BY total_spent;
+
+
+-- OUR FIRST RIGHT JOIN (seems the same as a left join?)
+
+SELECT * FROM customers
+RIGHT JOIN orders
+    ON customers.id = orders.customer_id;
+	
+	
+	
+	
+	MANY TO MANY
+	
+	CODE: Creating Our Tables
+-- CREATING THE REVIEWERS TABLE
+
+
+
+CREATE TABLE reviewers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(100),
+    last_name VARCHAR(100)
+);
+-- CREATING THE SERIES TABLE
+
+CREATE TABLE series(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(100),
+    released_year YEAR(4),
+    genre VARCHAR(100)
+);
+-- CREATING THE REVIEWS TABLE
+
+CREATE TABLE reviews (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    rating DECIMAL(2,1),
+    series_id INT,
+    reviewer_id INT,
+    FOREIGN KEY(series_id) REFERENCES series(id),
+    FOREIGN KEY(reviewer_id) REFERENCES reviewers(id)
+);
+
+
+
+CODE: TV Joins Challenge 1 Solution
+-- TV Joins Challenge 1 SOLUTION
+
+
+
+SELECT 
+    title, 
+    rating 
+FROM series
+JOIN reviews
+    ON series.id = reviews.series_id;
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+ 

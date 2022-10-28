@@ -1,0 +1,151 @@
+Git is free and open source.
+
+its a version control system   - > it means when multiple ppl working on same project for tracking the changes version
+control system is used.
+
+GitHub is centralized space where repo is belong and everyone put their code to this centralized Repo to collaborte each other.
+
+For getting  a copy  of  a repo we need to Fork it.  doing in github itself
+
+Clone the repo means it become  local repo ie in our system   . doing in our local system
+
+SSH KEY SETUP:
+ssh key is created for security/privacy when we pusing or pull from the github account.  
+my file saved here by defult/utomticlly: /c/Users/Richu Andrews/.ssh/id_rsa
+
+Command:
+ssh-keygen -t rsa -b 4096 -C richuanivelil@gmail.com
+
+ssh agent also need to be created, we need to add the ssh key to the agent.
+
+Command for create agent:
+eval $(ssh-agent -s)
+
+Eg:
+$ eval $(ssh-agent -s)
+Agent pid 1159 
+Agent created and running at port 1159  
+
+Now add the the key to agent 
+
+Command:
+ssh-add ~/.ssh/id_rsa
+
+Eg:
+$ ssh-add ~/.ssh/id_rsa
+Identity added: /c/Users/Richu Andrews/.ssh/id_rsa (richuanivelil@gmail.com)
+
+Later add this value from id_rsa mp file from our local to github account in settings -> add ssh key
+
+
+git remote set-url origin  https://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@github.com/richuandrews/jenkinsjobmaven.git
+
+or
+
+
+
+
+
+1587
+
+
+From August 13, 2021, GitHub is no longer accepting account passwords when authenticating Git operations. You need to add a PAT (Personal Access Token) instead, and you can follow the below method to add a PAT on your system.
+
+Create Personal Access Token on GitHub
+From your GitHub account, go to Settings => Developer Settings => Personal Access Token => Generate New Token (Give your password) => Fillup the form => click Generate token => Copy the generated Token, it will be something like ghp_sFhFsSHhTzMDreGRLjmks4Tzuzgthdvfsrta
+
+Now follow below method based on your machine:
+
+For Windows OS ⤴
+Go to Credential Manager from Control Panel => Windows Credentials => find git:https://github.com => Edit => On Password replace with with your
+ GitHub Personal Access Token => You are Done
+
+If you don’t find git:https://github.com => Click on Add a generic credential => Internet address will be git:https://github.com and you need to type in your username and password will be your GitHub Personal Access Token => Click Ok and you are done
+
+
+
+
+git init -> command is used to initilize our local directory as a local git repo.  ie working area.   it will have .git folder if we want to check
+			if it is a working area or not.
+
+git status -> command is used to check the uncommited/untracked changes happens to our local repo since last commit  {it will show the file names tht edited,  git diff will show content}.
+
+git add . ->  command is used to make all files tracked.{Stage area/staged files}
+
+git commit -m "message" -> command is used to save all the changes added. before pushing we have to commit our changes.
+
+git commit --amend       -> to edit the previous commit by adding the missed messge or by adding some more files or dir  (git add. then git commint --amend)
+
+git remote add origin "path from github"  -> used to set the target repo of our push.
+
+git remote -v  -> command for verifiying the push and pull path by displaying.
+
+git push -u origin master  -> command is for push the changes to repo.
+
+git clone "repourl"  -> command is for download the code from another repo to our local repo.
+
+git clone "repourl"  -> command is for download the code from another repo to our local repo.
+
+git remote add upstream "upstreamrepourl" -> command to set upstream (up[stream is where the updated code si/ the main repo).
+
+git diff  -> command shows the difference made in our working area.
+
+git diff HEAD -> command shows the difference made in our working area from last commit.
+
+git restore --staged "file name"   --> command used to undo the previos git add {if space in file name use double quotes}
+
+git restore "file name"   -> command used to get the previously commited file ie undo all the changes after last commit on the file.
+
+git commit --amend  -> command to change the last commit message. {it will open a editble file we have to change the message there}.
+
+git log  --> command will show the logs of the enitire commit history.
+
+git pull upstream master  -> command to pull from upstream repo master. {main repo we configured} by default
+							it will pull from forked repo if we didnt mention upstream
+							
+git checkout  <log hash value of commit>   -> it will take to the changes where we stopped at that particlular commit
+
+git restore   -> similar to git checkout{see the documentation}
+
+git reset
+
+git revert
+							
+
+git stash -> command to store the changes to a stash
+
+git stash apply  -> to bring back the change we stored it to stash and then we can commit if we prefer
+
+
+BRANCHES:
+
+git branch  -> command list all the branches under our main repo.
+
+git branch "branch name"  -> command to create new branch.
+
+git checkout "branchname"  -> commnd to switch to another branch.
+
+git branch -d "branch name"  -> command to delete a branch
+
+git checkout -b "branch name" -> command to create new branch and switch to it.
+
+git merge <branch name>    --> command to merge two branches, the bracnh we specifying will be merged to the current branch that we are while executing the command.
+
+
+
+git push origin --delete "branch name"   -> command to delete branch if we pushed anything to the branch.
+
+After Creating new branch to reflect in git hub we need to push.
+git push origin "branch name".
+
+
+Guidances:
+
+Before pulling from remote repo our local repo should be commited of all the changes.
+
+At organization level we will fork the min repo to our user profile then clone it to the local.
+After making/coding we will push the changes to our forked repo.
+And to make changes in org repo we will make a pull request/PR's and admin will verify/review our changes and push it to org main repo.
+
+
+After made changes we need to raise a pull request to merge to main organization repo then authorized person will validte and merge it.
