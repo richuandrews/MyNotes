@@ -14,7 +14,7 @@ ssh key is created for security/privacy when we pusing or pull from the github a
 my file saved here by defult/utomticlly: /c/Users/Richu Andrews/.ssh/id_rsa
 
 Command:
-ssh-keygen -t rsa -b 4096 -C richuanivelil@gmail.com
+ssh-keygen -t rsa -b 4096 -C richuan@gmail.com
 
 ssh agent also need to be created, we need to add the ssh key to the agent.
 
@@ -33,12 +33,12 @@ ssh-add ~/.ssh/id_rsa
 
 Eg:
 $ ssh-add ~/.ssh/id_rsa
-Identity added: /c/Users/Richu Andrews/.ssh/id_rsa (richuanivelil@gmail.com)
+Identity added: /c/Users/Richu Andrews/.ssh/id_rsa (richua@gmail.com)
 
 Later add this value from id_rsa mp file from our local to github account in settings -> add ssh key
 
 
-git remote set-url origin  https://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@github.com/richuandrews/jenkinsjobmaven.git
+git remote set-url origin  https://ghp_@github.com/richuandrews/jenkinsjobmaven.git
 
 or
 
